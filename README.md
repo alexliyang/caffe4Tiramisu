@@ -1,3 +1,9 @@
+# Caffe4Tiramisu
+
+This projects extends Caffe for the Tiramisu project.
+Mostly it modifies the feature extraction code for easier interaction
+
+
 # Caffe
 
 [![Build Status](https://travis-ci.org/BVLC/caffe.svg?branch=master)](https://travis-ci.org/BVLC/caffe)
