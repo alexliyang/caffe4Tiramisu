@@ -1,24 +1,25 @@
 # Caffe4Tiramisu
 
 This projects extends Caffe for the Tiramisu project.
-Mostly it modifies the feature extraction code for easier interaction.
+Mostly it modifies the feature extraction code for easier interaction, changing the output to an image vector file.
 
 ## GoogLeNet models
 
-The GoogLeNet models needed to run feature extraction are added in this repository. This is done for the sake of simplicity. Instructions on how to get them can be found on the original caffe site.
+The GoogLeNet models needed to run feature extraction are added in this repository. This is done for the sake of simplicity, even though its not recommended due to their size (50MB). Instructions on how to get them can be found on the original caffe site.
 
 ## Before running
 
-Two parameters need to be modified in the prototxt file (e.g., ~/gits/caffe4Tiramisu/models/bvlc_googlenet/feat_extract.prototxt):
+After download, two parameters need to be modified in the prototxt file (e.g., ~/gits/caffe4Tiramisu/models/bvlc_googlenet/feat_extract.prototxt):
 - the location of the mean_file shold be set to your local imagenet_mean.binaryproto (e.g., /your/local/path/caffe4Tiramisu/data/ilsvrc12)
-- the file_list.txt, by default set to /tmp/file_list.txt. This two column file of the form "image_path.jpg 0" defines the image (SINGULAR) to process
+- the file_list.txt, by default set to /tmp/file_list.txt. This two column file of the form "image_path.jpg 0" defines the image (SINGULAR) to process. Its a required temporal file.
 
 ## Calling feature extraction (example)
-/your/local/path/caffe4Tiramisu/build/tools/extract_featuresTiramisu /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/bvlc_googlenet.caffemodel /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/feat_extract.prototxt inception_4e/output /tmp/tst 
+/your/local/path/caffe4Tiramisu/build/tools/extract_featuresTiramisu /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/bvlc_googlenet.caffemodel /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/feat_extract.prototxt inception_4e/output /tmp/tst outFileName 
 
-the target directory (/tmp/tst in the example) must exist!
-the layers to extract (inception_4e/output) can be multiple, separated by commas
-only one image is process per call
+- the target directory (/tmp/tst in the example) must exist!
+- the layers to extract (inception_4e/output) can be multiple, separated by commas
+- only one image is process per call
+- output is stored in /tmp/tst/outFileName 
 
 # Caffe
 
