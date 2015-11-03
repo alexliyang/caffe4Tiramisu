@@ -32,14 +32,14 @@ int main(int argc, char** argv) {
 template<typename Dtype>
 int feature_extraction_pipeline(int argc, char** argv) {
   ::google::InitGoogleLogging(argv[0]);
-  const int num_required_args = 5;
+  const int num_required_args = 6;
   if (argc < num_required_args) {
     LOG(ERROR)<<
     "This program takes in a trained network and an input data layer, and then"
     " extract features of the input data produced by the net.\n"
     "Usage: extract_features  pretrained_net_param"
     "  feature_extraction_proto_file  extract_feature_blob_name1[,name2,...]"
-    "  save_feature_dataset_name1[,name2,...]  num_mini_batches  db_type"
+    "  save_feature_dataset_name1[,name2,...]  fileName"
     "  [CPU/GPU] [DEVICE_ID=0]\n"
     "Note: you can extract multiple features in one pass by specifying"
     " multiple feature blob names and dataset names separated by ','."
@@ -118,67 +118,42 @@ int feature_extraction_pipeline(int argc, char** argv) {
         << " in the network " << feature_extraction_proto;
   }
 
+  const char* fileName = argv[++arg_pos];
+
   //int num_mini_batches = atoi(argv[++arg_pos]);
   //This parameter defines the number of images to be processed in parallel. 
   //Currently we assume we process one image at a time
-  int num_mini_batches = 1;
-
-  LOG(ERROR)<< "Extracting Features";
   Datum datum;
   std::vector<Blob<float>*> input_vec;
-  std::vector<int> image_indices(num_features, 0);
-  for (int batch_index = 0; batch_index < num_mini_batches; ++batch_index) {
-    feature_extraction_net->Forward(input_vec);
+  std::ofstream file;
+  LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".ivf";
+  file.open((dataset_names[0]+fileName+".ivf").c_str(),std::ios::trunc);
+  std::ofstream file_cfg;
+  LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".cfg";
+  file_cfg.open((dataset_names[0]+fileName+".cfg").c_str(),std::ios::trunc);
 
-    if(batch_index>0)break; 
-    LOG(ERROR)<< "Forcing batch index to 1";
-    int total_features = 0;
-    int offset = 0;
-    for (int i = 0; i < num_features; ++i) {
-      const shared_ptr<Blob<Dtype> > feature_blob = feature_extraction_net
-          ->blob_by_name(blob_names[i]);
-      int batch_size = feature_blob->num();
-      int dim_features = feature_blob->count() / batch_size;
-      const Dtype* feature_blob_data;
-
-      total_features+=dim_features;
-      std::ofstream file;
-      LOG(ERROR)<< "Current layer features: " << total_features;
-      LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << "/vector_file.ivf";
-      file.open((dataset_names[0]+"/vector_file.ivf").c_str(),std::ios::app);
-      std::ofstream file_cfg;
-      LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << "/vector_file.cfg";
-      file_cfg.open((dataset_names[0]+"/vector_file.cfg").c_str(),std::ios::app);
-      file_cfg<<blob_names[i]<<" "<<dim_features<<"\n";
-
-      for (int n = 0; n < batch_size; ++n) {
-        if(n>0)break;
-        LOG(ERROR)<< "Forcing batch size to 1";
-        feature_blob_data = feature_blob->cpu_data() +
-            feature_blob->offset(n);
-
-        for (int d = 0; d < dim_features; ++d) {
-          //Commented line. We dont need Caffe to store anything.
-          //datum.add_float_data(feature_blob_data[d]);
-          if(feature_blob_data[d] > 0) file<<feature_blob_data[d]<<" "<<d+offset<<"\n";
-        } 
-        //END TIRAMISU CODE
-        ++image_indices[i];
-      }  // for (int n = 0; n < batch_size; ++n)
-      
-      offset+=dim_features;   
- 
-    file.close();
-
-    }  // for (int i = 0; i < num_features; ++i)
-  }  // for (int batch_index = 0; batch_index < num_mini_batches; ++batch_index)
-  // write the last batch
+  feature_extraction_net->Forward(input_vec);
+  int total_features = 0;
+  int offset = 0;
   for (int i = 0; i < num_features; ++i) {
-    LOG(ERROR)<< "Extracted features of " << image_indices[i] <<
-        " query images for feature blob " << blob_names[i];
-  }
+    const shared_ptr<Blob<Dtype> > feature_blob = feature_extraction_net
+        ->blob_by_name(blob_names[i]);
+    int dim_features = feature_blob->count();
+    const Dtype* feature_blob_data;
+  
+    total_features+=dim_features;
+    LOG(ERROR)<< "Extracting "<<total_features<<" features from blob "<<blob_names[i];
+    file_cfg<<blob_names[i]<<" "<<dim_features<<"\n";
 
-  LOG(ERROR)<< "Successfully extracted the features!";
+    feature_blob_data = feature_blob->cpu_data() + feature_blob->offset(0);
+    for (int d = 0; d < dim_features; ++d) {
+      if(feature_blob_data[d] > 0) file<<feature_blob_data[d]<<" "<<d+offset<<"\n";
+    } 
+    offset+=dim_features;   
+  }  
+  file.close();
+  file_cfg.close();
+  LOG(ERROR)<< "Successfully extracted all features!";
   return 0;
 }
 
