@@ -134,6 +134,7 @@ int feature_extraction_pipeline(int argc, char** argv) {
   std::ofstream file_cfg;
   LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".cfg";
   file_cfg.open((dataset_names[0]+fileName+".cfg").c_str(),std::ios::trunc);
+  file_cfg<<fileName<<"\n";
 
   feature_extraction_net->Forward(input_vec);
   int total_features = 0;
