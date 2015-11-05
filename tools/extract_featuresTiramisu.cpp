@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 template<typename Dtype>
 int feature_extraction_pipeline(int argc, char** argv) {
   ::google::InitGoogleLogging(argv[0]);
-  const int num_required_args = 6;
+  const int num_required_args = 7;
   if (argc < num_required_args) {
     LOG(ERROR)<<
     "This program takes in a trained network and an input data layer, and then"
@@ -119,6 +119,8 @@ int feature_extraction_pipeline(int argc, char** argv) {
   }
 
   const char* fileName = argv[++arg_pos];
+  //Type of output file
+  int outputType = atoi(argv[++arg_pos]);
 
   //int num_mini_batches = atoi(argv[++arg_pos]);
   //This parameter defines the number of images to be processed in parallel. 
@@ -128,9 +130,9 @@ int feature_extraction_pipeline(int argc, char** argv) {
   std::ofstream file;
   LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".ivf";
   //CHAR
-  file.open((dataset_names[0]+fileName+".ivf").c_str(),std::ios::trunc);
+  if(outputType==1) file.open((dataset_names[0]+fileName+".ivf").c_str(),std::ios::trunc);
   //BINARY
-  //file.open((dataset_names[0]+fileName+".ivf").c_str(),std::ios::binary);
+  if(outputType==2) file.open((dataset_names[0]+fileName+".ivf").c_str(),std::ios::binary);
   std::ofstream file_cfg;
   LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".cfg";
   file_cfg.open((dataset_names[0]+fileName+".cfg").c_str(),std::ios::trunc);
@@ -152,14 +154,18 @@ int feature_extraction_pipeline(int argc, char** argv) {
     feature_blob_data = feature_blob->cpu_data() + feature_blob->offset(0);
     for (int d = 0; d < dim_features; ++d) {
       //CHAR
-      if(feature_blob_data[d] > 0) file<<feature_blob_data[d]<<" "<<d+offset<<"\n";
+      if(outputType==1){
+        if(feature_blob_data[d] > 0) file<<feature_blob_data[d]<<" "<<d+offset<<"\n";
+      }
       //BINARY
-      //if(feature_blob_data[d] > 0) {
-      //  int position = d + offset;
-      //  float value = feature_blob_data[d]; 
-      //  file.write(reinterpret_cast<char *>(&position), sizeof(position));
-      //  file.write(reinterpret_cast<char *>(&value), sizeof(value));
-      //}
+      if(outputType==2){
+        if(feature_blob_data[d] > 0) {
+          int position = d + offset;
+          float value = feature_blob_data[d]; 
+          file.write(reinterpret_cast<char *>(&position), sizeof(position));
+          file.write(reinterpret_cast<char *>(&value), sizeof(value));
+        }
+      }
     } 
     offset+=dim_features;   
   }  
