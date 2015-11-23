@@ -14,12 +14,13 @@ After download, two parameters need to be modified in the prototxt file (e.g., ~
 - the file_list.txt, by default set to /tmp/file_list.txt. This two column file of the form "image_path.jpg 0" defines the image (SINGULAR) to process. Its a required temporal file.
 
 ## Calling feature extraction (example)
-/your/local/path/caffe4Tiramisu/build/tools/extract_featuresTiramisu /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/bvlc_googlenet.caffemodel /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/feat_extract.prototxt inception_4e/output /tmp/tst outFileName 
+/your/local/path/caffe4Tiramisu/build/tools/extract_featuresTiramisu /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/bvlc_googlenet.caffemodel /your/local/path/caffe4Tiramisu/models/bvlc_googlenet/feat_extract.prototxt inception_4e/output /tmp/tst outFileName outputType 
 
 - the target directory (/tmp/tst in the example) must exist!
 - the layers to extract (inception_4e/output) can be multiple, separated by commas
 - only one image is process per call
-- output is stored in /tmp/tst/outFileName 
+- output is stored in /tmp/tst/outFileName
+- output type is either 1 (char file) or 2 (binary file)
 
 # Caffe
 
