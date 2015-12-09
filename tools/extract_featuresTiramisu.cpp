@@ -149,24 +149,28 @@ int feature_extraction_pipeline(int argc, char** argv) {
   
     total_features+=dim_features;
     LOG(ERROR)<< "Extracting "<<total_features<<" features from blob "<<blob_names[i];
-    file_cfg<<blob_names[i]<<" "<<dim_features<<"\n";
-
+    int layerCounter = 0;
     feature_blob_data = feature_blob->cpu_data() + feature_blob->offset(0);
     for (int d = 0; d < dim_features; ++d) {
       //CHAR
       if(outputType==1){
-        if(feature_blob_data[d] > 0) file<<feature_blob_data[d]<<" "<<d+offset<<"\n";
+        if(feature_blob_data[d] > 0) {
+            layerCounter++;
+            file<<feature_blob_data[d]<<" "<<d+offset<<"\n";
+        }
       }
       //BINARY
       if(outputType==2){
         if(feature_blob_data[d] > 0) {
+          layerCounter++;
           int position = d + offset;
           float value = feature_blob_data[d]; 
           file.write(reinterpret_cast<char *>(&position), sizeof(position));
           file.write(reinterpret_cast<char *>(&value), sizeof(value));
         }
       }
-    } 
+    }
+    file_cfg<<blob_names[i]<<":"<<dim_features<<":"<<layerCounter<<"\n";
     offset+=dim_features;   
   }  
   file.close();
