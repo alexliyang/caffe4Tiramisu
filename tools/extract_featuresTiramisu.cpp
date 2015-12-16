@@ -133,11 +133,13 @@ int feature_extraction_pipeline(int argc, char** argv) {
   if(outputType==1) file.open((dataset_names[0]+fileName+".ivf").c_str(),std::ios::trunc);
   //BINARY
   if(outputType==2) file.open((dataset_names[0]+fileName+".ivf").c_str(),std::ios::binary);
+  //Write first part of CFG file
   std::ofstream file_cfg;
   LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".cfg";
   file_cfg.open((dataset_names[0]+fileName+".cfg").c_str(),std::ios::trunc);
-  file_cfg<<fileName<<"\n";
-
+  file_cfg<<"IMAGENAME:"<<fileName<<"\n";
+  file_cfg<<"CAFFEMODEL:"<<pretrained_binary_proto.substr(pretrained_binary_proto.rfind("/")+1,pretrained_binary_proto.length())<<"\n";
+  //Extract layers
   feature_extraction_net->Forward(input_vec);
   int total_features = 0;
   int offset = 0;
@@ -170,7 +172,8 @@ int feature_extraction_pipeline(int argc, char** argv) {
         }
       }
     }
-    file_cfg<<blob_names[i]<<":"<<dim_features<<":"<<layerCounter<<"\n";
+    //Store layer info to CFG file
+    file_cfg<<"LAYER:"<<blob_names[i]<<":"<<dim_features<<":"<<layerCounter<<"\n";
     offset+=dim_features;   
   }  
   file.close();
