@@ -137,6 +137,7 @@ int feature_extraction_pipeline(int argc, char** argv) {
   std::ofstream file_cfg;
   LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".cfg";
   file_cfg.open((dataset_names[0]+fileName+".cfg").c_str(),std::ios::trunc);
+  file_cfg<<"TYPE:"<<"imageVector\n";
   file_cfg<<"IMAGENAME:"<<fileName<<"\n";
   file_cfg<<"CAFFEMODEL:"<<pretrained_binary_proto.substr(pretrained_binary_proto.rfind("/")+1,pretrained_binary_proto.length())<<"\n";
   //Extract layers
