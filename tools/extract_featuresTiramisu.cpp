@@ -137,6 +137,7 @@ int feature_extraction_pipeline(int argc, char** argv) {
   //Write first part of CFG file
   std::ofstream file_cfg;
   LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << fileName<<".cfg";
+  LOG(ERROR)<< "Writing to file: " << dataset_names[0].c_str() << className<<".cfg";
   file_cfg.open((dataset_names[0]+fileName+".cfg").c_str(),std::ios::trunc);
   file_cfg<<"TYPE:"<<"imageVector\n";
   file_cfg<<"IMAGENAME:"<<fileName<<"\n";
