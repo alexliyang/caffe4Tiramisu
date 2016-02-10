@@ -121,6 +121,7 @@ int feature_extraction_pipeline(int argc, char** argv) {
   const char* fileName = argv[++arg_pos];
   //Type of output file
   int outputType = atoi(argv[++arg_pos]);
+  const char* className = argv[++arg_pos];
 
   //int num_mini_batches = atoi(argv[++arg_pos]);
   //This parameter defines the number of images to be processed in parallel. 
@@ -139,6 +140,7 @@ int feature_extraction_pipeline(int argc, char** argv) {
   file_cfg.open((dataset_names[0]+fileName+".cfg").c_str(),std::ios::trunc);
   file_cfg<<"TYPE:"<<"imageVector\n";
   file_cfg<<"IMAGENAME:"<<fileName<<"\n";
+  file_cfg<<"CLASSNAME:"<<className<<"\n";
   file_cfg<<"CAFFEMODEL:"<<pretrained_binary_proto.substr(pretrained_binary_proto.rfind("/")+1,pretrained_binary_proto.length())<<"\n";
   //Extract layers
   feature_extraction_net->Forward(input_vec);
