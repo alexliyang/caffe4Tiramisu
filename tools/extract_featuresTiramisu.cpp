@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 template<typename Dtype>
 int feature_extraction_pipeline(int argc, char** argv) {
   ::google::InitGoogleLogging(argv[0]);
-  const int num_required_args = 9;
+  const int num_required_args = 8;
   if (argc < num_required_args) {
     LOG(ERROR)<<
     "This program takes in a trained network and an input data layer, and then"
