@@ -1,0 +1,107 @@
+This formula is keg-only, which means it was not symlinked into /usr/local.
+
+OS X provides the BSD libedit library, which shadows libreadline.
+In order to prevent conflicts when programs look for libreadline we are
+defaulting this GNU Readline installation to keg-only.
+
+
+Generally there are no consequences of this for you. If you build your
+own software and it requires this formula, you'll need to add to your
+build variables:
+
+    LDFLAGS:  -L/usr/local/opt/readline/lib
+    CPPFLAGS: -I/usr/local/opt/readline/include
+
+
+This formula is keg-only, which means it was not symlinked into /usr/local.
+
+OS X provides an older sqlite3.
+
+Generally there are no consequences of this for you. If you build your
+own software and it requires this formula, you'll need to add to your
+build variables:
+
+    LDFLAGS:  -L/usr/local/opt/sqlite/lib
+    CPPFLAGS: -I/usr/local/opt/sqlite/include
+
+A CA file has been bootstrapped using certificates from the system
+keychain. To add additional certificates, place .pem files in
+  /usr/local/etc/openssl/certs
+
+and run
+  /usr/local/opt/openssl/bin/c_rehash
+
+This formula is keg-only, which means it was not symlinked into /usr/local.
+
+Apple has deprecated use of OpenSSL in favor of its own TLS and crypto libraries
+
+Generally there are no consequences of this for you. If you build your
+own software and it requires this formula, you'll need to add to your
+build variables:
+
+    LDFLAGS:  -L/usr/local/opt/openssl/lib
+    CPPFLAGS: -I/usr/local/opt/openssl/include
+
+Pip and setuptools have been installed. To update them
+  pip install --upgrade pip setuptools
+
+You can install Python packages with
+  pip install <package>
+
+They will install into the site-package directory
+  /usr/local/lib/python2.7/site-packages
+
+See: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Homebrew-and-Python.md
+
+.app bundles were installed.
+Run `brew linkapps python` to symlink these to /Applications.
+
+
+
+-------------------
+
+
+GCC has been built with multilib support. Notably, OpenMP may not work:
+  https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60670
+If you need OpenMP support you may want to
+  brew reinstall gcc --without-multilib
+
+Python modules have been installed and Homebrew's site-packages is not
+in your Python sys.path, so you will not be able to import the modules
+this formula installed. If you plan to develop with these modules,
+please run:
+  mkdir -p /Users/jmoreno/Library/Python/2.7/lib/python/site-packages
+  echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> /Users/jmoreno/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+
+
+Warning: homebrew/science/opencv dependency gcc was built with a different C++ standard
+library (libstdc++ from clang). This may cause problems at runtime.
+
+Python modules have been installed and Homebrew's site-packages is not
+in your Python sys.path, so you will not be able to import the modules
+this formula installed. If you plan to develop with these modules,
+please run:
+  mkdir -p /Users/jmoreno/Library/Python/2.7/lib/python/site-packages
+  echo 'import site; site.addsitedir("/usr/local/lib/python2.7/site-packages")' >> /Users/jmoreno/Library/Python/2.7/lib/python/site-packages/homebrew.pth
+
+----------------------
+
+configure: WARNING: Impossible to determine how to use pthreads with shared libraries and -nostdlib
+
+
+______________________
+
+no ha donat temps de vore-ho
+
+tot i aixi:
+
+
+The Boost C++ Libraries were successfully built!
+
+The following directory should be added to compiler include paths:
+
+    /private/tmp/boost-python20160107-48725-qry3y4/boost_1_59_0
+
+The following directory should be added to linker library paths:
+
+    /private/tmp/boost-python20160107-48725-qry3y4/boost_1_59_0/stage-python/lib
