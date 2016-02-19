@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 template<typename Dtype>
 int feature_extraction_pipeline(int argc, char** argv) {
   ::google::InitGoogleLogging(argv[0]);
-  const int num_required_args = 8;
+  const int num_required_args = 7;
   if (argc < num_required_args) {
     LOG(ERROR)<<
     "This program takes in a trained network and an input data layer, and then"
@@ -64,7 +64,6 @@ int feature_extraction_pipeline(int argc, char** argv) {
     LOG(ERROR) << "Using CPU";
     Caffe::set_mode(Caffe::CPU);
   }
-
   arg_pos = 0;  // the name of the executable
   std::string pretrained_binary_proto(argv[++arg_pos]);
 

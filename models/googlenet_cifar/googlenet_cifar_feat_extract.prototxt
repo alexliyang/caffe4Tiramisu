@@ -7,10 +7,10 @@ layer {
   transform_param {
     mirror: false
     crop_size: 224
-    mean_file: "examples/11111/finetuning_maximo/mean.binaryproto"
+    mean_file: "/home/dariog/gits/caffe4Tiramisu/models/googlenet_cifar/googlenet_cifar_meanimage.binaryproto"
   }
   image_data_param {
-    source: "examples/11111/file_list.txt"
+    source: "/tmp/file_list.txt"
     batch_size: 1
     new_height: 256
     new_width: 256
