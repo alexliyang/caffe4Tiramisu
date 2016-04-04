@@ -7,7 +7,7 @@ layer {
   transform_param {
     mirror: false
     crop_size: 224
-    mean_file: "/home/dariog/gits/caffe4Tiramisu/data/ilsvrc12/imagenet_mean.binaryproto"
+    mean_file: "/Users/jmoreno/Documents/BSC_Work/Tiramisu/caffe4Tiramisu/models/bvlc_googlenet/imagenet_mean.binaryproto"
   }
   image_data_param {
     source: "/tmp/file_list.txt"

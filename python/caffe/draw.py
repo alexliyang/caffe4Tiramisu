@@ -10,7 +10,7 @@ Caffe network visualization: draw the NetParameter protobuffer.
 """
 
 from caffe.proto import caffe_pb2
-import pydot
+import pydot2
 
 # Internal layer and blob styles.
 LAYER_STYLE_DEFAULT = {'shape': 'record',
